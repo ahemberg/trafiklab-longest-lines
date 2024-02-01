@@ -1,15 +1,12 @@
 package eu.alehem.longestlines.controller;
 
 import static org.hamcrest.Matchers.is;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import eu.alehem.longestlines.model.dto.LineDTO;
-import eu.alehem.longestlines.model.dto.StopDTO;
-import eu.alehem.longestlines.model.dto.StopsDTO;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +31,8 @@ class BusLineControllerTest {
   }
 
   @Test
-  void longestPathShouldReturnJsonWithLinkToSelfWhenNoLinesAreAvailable() throws Exception {
-    //Not Implemented
+  void longestPathShouldReturnJsonWithLinkToSelfWhenNoLinesAreAvailable() {
+    // Not Implemented
   }
 
   @Test
@@ -135,12 +132,12 @@ class BusLineControllerTest {
   }
 
   @Test
-  void stopsShallReturn404WhenLineDoesNotExist() throws Exception {
+  void stopsShallReturn404WhenLineDoesNotExist() {
     // NOT Implemented
   }
 
   @Test
-  void stopsShallReturn400OnInvalidInput() throws Exception {
+  void stopsShallReturn400OnInvalidInput() {
     // NOT Implemented
   }
 
