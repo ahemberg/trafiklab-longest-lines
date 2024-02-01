@@ -27,11 +27,9 @@ import org.springframework.test.web.servlet.MockMvc;
 class BusLineControllerTest {
   @Autowired private MockMvc mockMvc;
 
-  @MockBean
-  LineService lineService;
+  @MockBean LineService lineService;
 
-  @MockBean
-  StopService stopService;
+  @MockBean StopService stopService;
 
   @Test
   void rootPathShouldReturnLinkToLongestLines() throws Exception {
@@ -355,7 +353,6 @@ class BusLineControllerTest {
         .perform(get("/clear-text/longest"))
         .andExpect(status().isOk())
         .andExpect(content().string("1,2,3,4,5,6,7,8,9,10"));
-
   }
 
   @Test
@@ -377,7 +374,6 @@ class BusLineControllerTest {
         .perform(get("/clear-text/longest/outbound"))
         .andExpect(status().isOk())
         .andExpect(content().string("1,2,3,4,5,6,7,8,9,10"));
-
   }
 
   @Test
@@ -399,7 +395,6 @@ class BusLineControllerTest {
         .perform(get("/clear-text/longest/inbound"))
         .andExpect(status().isOk())
         .andExpect(content().string("1,2,3,4,5,6,7,8,9,10"));
-
   }
 
   @Test
@@ -475,7 +470,10 @@ class BusLineControllerTest {
     this.mockMvc
         .perform(get("/clear-text/stops/1"))
         .andExpect(status().isOk())
-        .andExpect(content().string("First Stop,Second Stop,Third Stop,Fourth Stop,Fourth Stop,Second Stop,First Stop"));
+        .andExpect(
+            content()
+                .string(
+                    "First Stop,Second Stop,Third Stop,Fourth Stop,Fourth Stop,Second Stop,First Stop"));
   }
 
   @Test
@@ -489,4 +487,73 @@ class BusLineControllerTest {
     when(stopService.getAllStopsForLine(anyInt())).thenReturn(Optional.empty());
     this.mockMvc.perform(get("/clear-text/stops/invalid")).andExpect(status().isBadRequest());
   }
+
+  @Test
+  void outboundStopsAsClearTextShallReturnExpectedResponseForValidLine() throws Exception {
+    final StopsDTO expectedStops =
+        new StopsDTO(
+            1,
+            List.of(
+                new StopDTO(1, "First Stop"),
+                new StopDTO(2, "Second Stop"),
+                new StopDTO(3, "Third Stop"),
+                new StopDTO(4, "Fourth Stop")),
+            List.of(
+                new StopDTO(4, "Fourth Stop"),
+                new StopDTO(2, "Second Stop"),
+                new StopDTO(1, "First Stop")));
+
+    when(stopService.getAllStopsForLine(1)).thenReturn(Optional.of(expectedStops));
+    this.mockMvc
+        .perform(get("/clear-text/stops/1/outbound"))
+        .andExpect(status().isOk())
+        .andExpect(content().string("First Stop,Second Stop,Third Stop,Fourth Stop"));
+  }
+
+  @Test
+  void outboundStopsAsClearTextShallReturn404WhenLineDoesNotExist() throws Exception {
+    when(stopService.getAllStopsForLine(anyInt())).thenReturn(Optional.empty());
+    this.mockMvc.perform(get("/clear-text/stops/0/outbound")).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void outboundStopsAsClearTextShallReturn400OnInvalidInput() throws Exception {
+    when(stopService.getAllStopsForLine(anyInt())).thenReturn(Optional.empty());
+    this.mockMvc.perform(get("/clear-text/stops/outbound")).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void inboundStopsAsClearTextShallReturnExpectedResponseForValidLine() throws Exception {
+    final StopsDTO expectedStops =
+        new StopsDTO(
+            1,
+            List.of(
+                new StopDTO(1, "First Stop"),
+                new StopDTO(2, "Second Stop"),
+                new StopDTO(3, "Third Stop"),
+                new StopDTO(4, "Fourth Stop")),
+            List.of(
+                new StopDTO(4, "Fourth Stop"),
+                new StopDTO(2, "Second Stop"),
+                new StopDTO(1, "First Stop")));
+
+    when(stopService.getAllStopsForLine(1)).thenReturn(Optional.of(expectedStops));
+    this.mockMvc
+        .perform(get("/clear-text/stops/1/inbound"))
+        .andExpect(status().isOk())
+        .andExpect(content().string("Fourth Stop,Second Stop,First Stop"));
+  }
+
+  @Test
+  void inboundStopsAsClearTextShallReturn404WhenLineDoesNotExist() throws Exception {
+    when(stopService.getAllStopsForLine(anyInt())).thenReturn(Optional.empty());
+    this.mockMvc.perform(get("/clear-text/stops/0/inbound")).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void inboundStopsAsClearTextShallReturn400OnInvalidInput() throws Exception {
+    when(stopService.getAllStopsForLine(anyInt())).thenReturn(Optional.empty());
+    this.mockMvc.perform(get("/clear-text/stops/inbound")).andExpect(status().isBadRequest());
+  }
+  //
 }

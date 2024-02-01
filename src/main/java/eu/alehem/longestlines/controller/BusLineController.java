@@ -147,4 +147,28 @@ public class BusLineController {
         .map(StopDTO::name)
         .collect(Collectors.joining(","));
   }
+
+  @GetMapping("clear-text/stops/{lineNumber}/outbound")
+  public String getOutboundStopsAsClearText(@PathVariable int lineNumber) {
+    StopsDTO stopsDTO =
+        stopService
+            .getAllStopsForLine(lineNumber)
+            .orElseThrow(() -> new BusLineNotFoundException(lineNumber));
+
+    return stopsDTO.outboundStops().stream()
+        .map(StopDTO::name)
+        .collect(Collectors.joining(","));
+  }
+
+  @GetMapping("clear-text/stops/{lineNumber}/inbound")
+  public String getInoundStopsAsClearText(@PathVariable int lineNumber) {
+    StopsDTO stopsDTO =
+        stopService
+            .getAllStopsForLine(lineNumber)
+            .orElseThrow(() -> new BusLineNotFoundException(lineNumber));
+
+    return stopsDTO.inboundStops().stream()
+        .map(StopDTO::name)
+        .collect(Collectors.joining(","));
+  }
 }
