@@ -5,10 +5,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import eu.alehem.longestlines.exceptions.BusLineNotFoundException;
 import eu.alehem.longestlines.model.dto.LineDTO;
+import eu.alehem.longestlines.model.dto.StopDTO;
 import eu.alehem.longestlines.model.dto.StopsDTO;
 import eu.alehem.longestlines.service.LineService;
 import eu.alehem.longestlines.service.StopService;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -56,6 +58,14 @@ public class BusLineController {
             .toList());
   }
 
+  @GetMapping("/clear-text/longest")
+  public String getLongestLinesAsClearText() {
+    return lineService.getLongestLines(10).stream()
+        .map(LineDTO::lineNumber)
+        .map(Object::toString)
+        .collect(Collectors.joining(","));
+  }
+
   @GetMapping("/longest/outbound")
   public CollectionModel<LineDTO> getLongestOutbound() {
     List<LineDTO> longestLines = lineService.getLongestOutboundLines(10);
@@ -73,6 +83,14 @@ public class BusLineController {
                 Stream.of(
                     linkTo(methodOn(BusLineController.class).getLongestOutbound()).withSelfRel()))
             .toList());
+  }
+
+  @GetMapping("/clear-text/longest/outbound")
+  public String getLongestOutboundAsClearText() {
+    return lineService.getLongestOutboundLines(10).stream()
+        .map(LineDTO::lineNumber)
+        .map(Object::toString)
+        .collect(Collectors.joining(","));
   }
 
   @GetMapping("/longest/inbound")
@@ -94,6 +112,14 @@ public class BusLineController {
             .toList());
   }
 
+  @GetMapping("/clear-text/longest/inbound")
+  public String getLongestInboundAsClearText() {
+    return lineService.getLongestInboundLines(10).stream()
+        .map(LineDTO::lineNumber)
+        .map(Object::toString)
+        .collect(Collectors.joining(","));
+  }
+
   @GetMapping("/stops/{lineNumber}")
   public EntityModel<StopsDTO> getStops(@PathVariable int lineNumber) {
 
@@ -108,5 +134,17 @@ public class BusLineController {
         linkTo(methodOn(BusLineController.class).getLongestLines()).withRel("longest"),
         linkTo(methodOn(BusLineController.class).getLongestOutbound()).withRel("longest/outbound"),
         linkTo(methodOn(BusLineController.class).getLongestInbound()).withRel("longest/inbound"));
+  }
+
+  @GetMapping("clear-text/stops/{lineNumber}")
+  public String getStopsAsClearText(@PathVariable int lineNumber) {
+    StopsDTO stopsDTO =
+        stopService
+            .getAllStopsForLine(lineNumber)
+            .orElseThrow(() -> new BusLineNotFoundException(lineNumber));
+
+    return Stream.concat(stopsDTO.outboundStops().stream(), stopsDTO.inboundStops().stream())
+        .map(StopDTO::name)
+        .collect(Collectors.joining(","));
   }
 }
