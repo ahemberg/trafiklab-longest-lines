@@ -3,8 +3,7 @@
 ## Overview
 
 This Spring Boot application offers an API to fetch the ten longest SL lines and lists all stops for
-a specified line.
-It provdes both JSON and plaintext responses
+a specified line. It provides both JSON and plaintext responses
 
 ## Setup
 
