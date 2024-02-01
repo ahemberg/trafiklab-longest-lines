@@ -337,6 +337,72 @@ class BusLineControllerTest {
   }
 
   @Test
+  void longestPathAsClearTextShouldReturnExpectedString() throws Exception {
+    List<LineDTO> expectedLongest = new ArrayList<>(10);
+    expectedLongest.add(new LineDTO(1));
+    expectedLongest.add(new LineDTO(2));
+    expectedLongest.add(new LineDTO(3));
+    expectedLongest.add(new LineDTO(4));
+    expectedLongest.add(new LineDTO(5));
+    expectedLongest.add(new LineDTO(6));
+    expectedLongest.add(new LineDTO(7));
+    expectedLongest.add(new LineDTO(8));
+    expectedLongest.add(new LineDTO(9));
+    expectedLongest.add(new LineDTO(10));
+
+    when(lineService.getLongestLines(anyInt())).thenReturn(expectedLongest);
+    this.mockMvc
+        .perform(get("/clear-text/longest"))
+        .andExpect(status().isOk())
+        .andExpect(content().string("1,2,3,4,5,6,7,8,9,10"));
+
+  }
+
+  @Test
+  void longestOutboundAsClearTextShouldReturnExpectedString() throws Exception {
+    List<LineDTO> expectedLongest = new ArrayList<>(10);
+    expectedLongest.add(new LineDTO(1));
+    expectedLongest.add(new LineDTO(2));
+    expectedLongest.add(new LineDTO(3));
+    expectedLongest.add(new LineDTO(4));
+    expectedLongest.add(new LineDTO(5));
+    expectedLongest.add(new LineDTO(6));
+    expectedLongest.add(new LineDTO(7));
+    expectedLongest.add(new LineDTO(8));
+    expectedLongest.add(new LineDTO(9));
+    expectedLongest.add(new LineDTO(10));
+
+    when(lineService.getLongestOutboundLines(anyInt())).thenReturn(expectedLongest);
+    this.mockMvc
+        .perform(get("/clear-text/longest/outbound"))
+        .andExpect(status().isOk())
+        .andExpect(content().string("1,2,3,4,5,6,7,8,9,10"));
+
+  }
+
+  @Test
+  void longestInboundAsClearTextShouldReturnExpectedString() throws Exception {
+    List<LineDTO> expectedLongest = new ArrayList<>(10);
+    expectedLongest.add(new LineDTO(1));
+    expectedLongest.add(new LineDTO(2));
+    expectedLongest.add(new LineDTO(3));
+    expectedLongest.add(new LineDTO(4));
+    expectedLongest.add(new LineDTO(5));
+    expectedLongest.add(new LineDTO(6));
+    expectedLongest.add(new LineDTO(7));
+    expectedLongest.add(new LineDTO(8));
+    expectedLongest.add(new LineDTO(9));
+    expectedLongest.add(new LineDTO(10));
+
+    when(lineService.getLongestInboundLines(anyInt())).thenReturn(expectedLongest);
+    this.mockMvc
+        .perform(get("/clear-text/longest/inbound"))
+        .andExpect(status().isOk())
+        .andExpect(content().string("1,2,3,4,5,6,7,8,9,10"));
+
+  }
+
+  @Test
   void stopsShallReturn404WhenLineDoesNotExist() throws Exception {
     when(stopService.getAllStopsForLine(anyInt())).thenReturn(Optional.empty());
     this.mockMvc.perform(get("/stops/0")).andExpect(status().isNotFound());
@@ -388,5 +454,39 @@ class BusLineControllerTest {
         .andExpect(
             jsonPath("_links.longest/outbound.href", is("http://localhost/longest/outbound")))
         .andExpect(jsonPath("_links.longest/inbound.href", is("http://localhost/longest/inbound")));
+  }
+
+  @Test
+  void stopsAsClearTextShallReturnExpectedResponseForValidLine() throws Exception {
+    final StopsDTO expectedStops =
+        new StopsDTO(
+            1,
+            List.of(
+                new StopDTO(1, "First Stop"),
+                new StopDTO(2, "Second Stop"),
+                new StopDTO(3, "Third Stop"),
+                new StopDTO(4, "Fourth Stop")),
+            List.of(
+                new StopDTO(4, "Fourth Stop"),
+                new StopDTO(2, "Second Stop"),
+                new StopDTO(1, "First Stop")));
+
+    when(stopService.getAllStopsForLine(1)).thenReturn(Optional.of(expectedStops));
+    this.mockMvc
+        .perform(get("/clear-text/stops/1"))
+        .andExpect(status().isOk())
+        .andExpect(content().string("First Stop,Second Stop,Third Stop,Fourth Stop,Fourth Stop,Second Stop,First Stop"));
+  }
+
+  @Test
+  void stopsAsClearTextShallReturn404WhenLineDoesNotExist() throws Exception {
+    when(stopService.getAllStopsForLine(anyInt())).thenReturn(Optional.empty());
+    this.mockMvc.perform(get("/clear-text/stops/0")).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void stopsAsClearTextShallReturn400OnInvalidInput() throws Exception {
+    when(stopService.getAllStopsForLine(anyInt())).thenReturn(Optional.empty());
+    this.mockMvc.perform(get("/clear-text/stops/invalid")).andExpect(status().isBadRequest());
   }
 }
