@@ -3,18 +3,17 @@
 ## Overview
 
 This Spring Boot application offers an API to fetch the ten longest SL lines and lists all stops for
-a specified line. It provides both JSON and plaintext responses
+a specified line. It provides both JSON and plaintext responses.
 
 ## Setup
 
 ### Requirements
 
-The service runs on Java 21 and is compiled using maven, thus you need to have java runtime 21
-installed and a recent version of maven
+The service runs on Java 21 and is compiled using maven, thus you need to have java runtime 21 and a recent version of maven installed.
 
 ## Running the service
 
-The simplest way to start up the service is to use the included mvn wrapper:
+The simplest way to start up the service is to use the included mvn wrapper from the root directory of the repository:
 
 ```shell
  ./mvnw clean spring-boot:run
@@ -35,7 +34,7 @@ trafiklab.api-key=<ADD-KEY-HERE>
 
 The service provides two endpoints, json and clear-text.
 
-### Json Endpoints
+### Json Endpoint
 
 The json endpoint is available from the root and has the following endpoints defined in the table
 below. The response is always a json object.
@@ -146,9 +145,9 @@ The format is as follows:
 }
 ```
 
-### Clear text Endpoints
+### Clear text Endpoint
 
-The clear text api is available under `/clear-text` and has the following endpoints defined in the
+The clear text endpoint is available under `/clear-text` and has the following endpoints defined in the
 table below. The response is a comma separated string.
 
 | Endpoint                         | Parameters  | Description                                                                                                                                                                                                              |
@@ -185,9 +184,9 @@ upstream data changes, but this is probably out of scope for this task.
 ### Algorithm for calculating the longest lines
 
 When storing bus lines in the database two datasets are joined, JourneyPatternPointOnLine and Line.
-All JourneyPatterns are transformed into two maps, where the key represents the bus line and the
+All JourneyPatternPoints are transformed into two maps, where the key represents the bus line and the
 value stored is a list representing either all outgoing or ingoing lines. This data is then joined
-by all bus lines from the dataset Line into a table with the following columns:
+with all bus lines from the dataset Line into a table with the following columns:
 
 | LINE_NUMBER | TOTAL_INBOUND | TOTAL_OUTBOUND | 	TOTAL_STOPS | 	INBOUND_STOPS | OUTBOUND_STOPS |
 |-------------|---------------|----------------|--------------|----------------|----------------|
