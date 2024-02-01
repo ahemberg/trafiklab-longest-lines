@@ -150,12 +150,14 @@ The format is as follows:
 The clear text endpoint is available under `/clear-text` and has the following endpoints defined in the
 table below. The response is a comma separated string.
 
-| Endpoint                         | Parameters  | Description                                                                                                                                                                                                              |
-|----------------------------------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
-| `clear-text/longest`             | None        | Returns the ten longest lines, as determined by total number of stops, i.e stops in both directions.                                                                                                                     |      
-| `clear-text/longest/outbound`    | None        | Returns the ten longest lines, as determined by total number of outgoing stops, i.e stops with direction code 1                                                                                                          |
-| `clear-text/longest/inbound`     | None        | Returns the ten longest lines, as determined by total number of incoming stops, i.e stops with direction code 2.                                                                                                         |
-| `clear-text/stops/{line-number}` | Line number | Returns all stops for a specific bus line if the bus line exists, otherwise it will return 404.  The bus stops are not ordered along the route but are presented in the order they are retrieved  by the trafikdata api. |
+| Endpoint                                  | Parameters  | Description                                                                                                                                                                                                                       |
+|-------------------------------------------|-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
+| `clear-text/longest`                      | None        | Returns the ten longest lines, as determined by total number of stops, i.e stops in both directions.                                                                                                                              |      
+| `clear-text/longest/outbound`             | None        | Returns the ten longest lines, as determined by total number of outgoing stops, i.e stops with direction code 1                                                                                                                   |
+| `clear-text/longest/inbound`              | None        | Returns the ten longest lines, as determined by total number of incoming stops, i.e stops with direction code 2.                                                                                                                  |
+| `clear-text/stops/{line-number}`          | Line number | Returns all stops for a specific bus line if the bus line exists, otherwise it will return 404.  The bus stops are not ordered along the route but are presented in the order they are retrieved  by the trafikdata api.          |
+| `clear-text/stops/{line-number}/outbound` | Line number | Returns all outbound stops for a specific bus line if the bus line exists, otherwise it will return 404.  The bus stops are not ordered along the route but are presented in the order they are retrieved  by the trafikdata api. |
+| `clear-text/stops/{line-number}/inbound`  | Line number | Returns all inbound stops for a specific bus line if the bus line exists, otherwise it will return 404.  The bus stops are not ordered along the route but are presented in the order they are retrieved  by the trafikdata api.  |
 
 ## Architecture
 
