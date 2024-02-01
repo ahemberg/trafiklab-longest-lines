@@ -1,4 +1,4 @@
-package eu.alehem.longestlines.dao;
+package eu.alehem.longestlines.model.dao;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
