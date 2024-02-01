@@ -127,7 +127,7 @@ The format of the response for the longest endpoints is identical, but the retur
 ```
 
 ### Cleartext API
-The cleartext api is available under `/cleartext` and has following endpoints defined in the table below. The response is a comma separated string.
+The cleartext api is available under `/clear-text` and has following endpoints defined in the table below. The response is a comma separated string.
 
 | Endpoint               | Parameters  | Description                                                                                |
 |------------------------|-------------|--------------------------------------------------------------------------------------------| 
