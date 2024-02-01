@@ -7,8 +7,6 @@ import java.util.TimeZone;
 
 public class DateUtil {
 
-  // TODO: make util package
-  // TODO: move to localdate
   public static Date dateFromString(String dateString) {
     return dateFromString(dateString, "yyyy-MM-dd HH:mm:ss.SSS");
   }
@@ -22,5 +20,4 @@ public class DateUtil {
       throw new RuntimeException(e);
     }
   }
-
 }
