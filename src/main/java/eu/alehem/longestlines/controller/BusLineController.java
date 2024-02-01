@@ -3,11 +3,14 @@ package eu.alehem.longestlines.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import eu.alehem.longestlines.exceptions.BusLineNotFoundException;
 import eu.alehem.longestlines.model.dto.LineDTO;
-import eu.alehem.longestlines.model.dto.StopDTO;
 import eu.alehem.longestlines.model.dto.StopsDTO;
+import eu.alehem.longestlines.service.LineService;
+import eu.alehem.longestlines.service.StopService;
 import java.util.List;
 import java.util.stream.Stream;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -20,6 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class BusLineController {
 
+  @Autowired private LineService lineService;
+
+  @Autowired private StopService stopService;
+
   @GetMapping("/")
   public EntityModel<Link> root() {
     return EntityModel.of(
@@ -31,7 +38,8 @@ public class BusLineController {
 
   @GetMapping("/longest")
   public CollectionModel<LineDTO> getLongestLines() {
-    List<LineDTO> longestLines = List.of(new LineDTO(1), new LineDTO(2), new LineDTO(3));
+
+    List<LineDTO> longestLines = lineService.getLongestLines(10);
     Stream<Link> links =
         longestLines.stream()
             .map(
@@ -50,7 +58,7 @@ public class BusLineController {
 
   @GetMapping("/longest/outbound")
   public CollectionModel<LineDTO> getLongestOutbound() {
-    List<LineDTO> longestLines = List.of(new LineDTO(1), new LineDTO(2), new LineDTO(3));
+    List<LineDTO> longestLines = lineService.getLongestOutboundLines(10);
     Stream<Link> links =
         longestLines.stream()
             .map(
@@ -69,7 +77,7 @@ public class BusLineController {
 
   @GetMapping("/longest/inbound")
   public CollectionModel<LineDTO> getLongestInbound() {
-    List<LineDTO> longestLines = List.of(new LineDTO(1), new LineDTO(2), new LineDTO(3));
+    List<LineDTO> longestLines = lineService.getLongestInboundLines(10);
     Stream<Link> links =
         longestLines.stream()
             .map(
@@ -90,10 +98,9 @@ public class BusLineController {
   public EntityModel<StopsDTO> getStops(@PathVariable int lineNumber) {
 
     StopsDTO stopsDTO =
-        new StopsDTO(
-            lineNumber,
-            List.of(new StopDTO(1, "1"), new StopDTO(2, "2"), new StopDTO(3, "3")),
-            List.of(new StopDTO(1, "1"), new StopDTO(2, "2"), new StopDTO(3, "3")));
+        stopService
+            .getAllStopsForLine(lineNumber)
+            .orElseThrow(() -> new BusLineNotFoundException(lineNumber));
 
     return EntityModel.of(
         stopsDTO,
