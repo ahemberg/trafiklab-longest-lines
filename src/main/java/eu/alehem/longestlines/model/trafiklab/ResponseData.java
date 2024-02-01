@@ -10,4 +10,5 @@ public record ResponseData<T extends TrafikLabData>(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
         Date version,
     @JsonProperty("Type") String type, // TODO: make me enum
-    @JsonProperty("Result") List<T> responseData) implements TrafikLabData {}
+    @JsonProperty("Result") List<T> responseData)
+    implements TrafikLabData {}
