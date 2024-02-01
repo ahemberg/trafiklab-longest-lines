@@ -1,38 +1,45 @@
 # TrafikLab Longest Lines
 
-A Spring boot application that provides an API to query to retrieve the ten longest SL lines. It
-also provides an api to list all stops for a given line.
+## Overview
+
+This Spring Boot application offers an API to fetch the ten longest SL lines and lists all stops for
+a specified line.
+It provdes both JSON and plaintext responses
+
+## Setup
+
+### Requirements
+
+The service runs on Java 21 and is compiled using maven, thus you need to have java runtime 21
+installed and a recent version of maven
 
 ## Running the service
 
-The service runs on Java 21 and is compiled using maven. The simplest way to start up the service is
-to use the included mvn wrapper like so
+The simplest way to start up the service is to use the included mvn wrapper:
 
 ```shell
  ./mvnw clean spring-boot:run
 ```
 
-This will load the service onto `localhost:8080`.
+The service will be accesible at `localhost:8080`.
 
-### Specify an API key
+### Configuration
 
-In order to be able to retrieve data from trafiklab you need to provide an API key. A key can be
-obtained from here: https://www.trafiklab.se/api/trafiklab-apis/sl/stops-and-lines-2/
-Once you have a key you need to change the config property `trafiklab-api-key`
-in `src/main/resources/application.properties`
+An API key from [Trafiklab](https://www.trafiklab.se/api/trafiklab-apis/sl/stops-and-lines-2/) is
+required. Update trafiklab-api-key in `src/main/resources/application.properties`:
 
 ```shell
 trafiklab.api-key=<ADD-KEY-HERE>
 ```
 
-## API
+## API Endpoints
 
-The service provides two apis. A json api and a cleartext api.
+The service provides two endpoints, json and clear-text.
 
-### Json API
+### Json Endpoints
 
-The json api is available from the root and has the following endpoints defined in the table below. The
-response is always a json object.
+The json endpoint is available from the root and has the following endpoints defined in the table
+below. The response is always a json object.
 
 | Endpoint               | Parameters  | Description                                                                                                                                                                                                              |
 |------------------------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -140,10 +147,10 @@ The format is as follows:
 }
 ```
 
-### Cleartext API
+### Clear text Endpoints
 
-The cleartext api is available under `/clear-text` and has the following endpoints defined in the table
-below. The response is a comma separated string.
+The clear text api is available under `/clear-text` and has the following endpoints defined in the
+table below. The response is a comma separated string.
 
 | Endpoint                         | Parameters  | Description                                                                                                                                                                                                              |
 |----------------------------------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
@@ -152,12 +159,12 @@ below. The response is a comma separated string.
 | `clear-text/longest/inbound`     | None        | Returns the ten longest lines, as determined by total number of incoming stops, i.e stops with direction code 2.                                                                                                         |
 | `clear-text/stops/{line-number}` | Line number | Returns all stops for a specific bus line if the bus line exists, otherwise it will return 404.  The bus stops are not ordered along the route but are presented in the order they are retrieved  by the trafikdata api. |
 
-## Mode of operation
+## Architecture
 
-The data returned by the API provided by this service is retrieved from an in memory database. This
-means that as the service starts there are no dependencies on any database connections, but it also
-means that no data is persisted during restarts. To load the data the service therefore calls the SL
-Api on start up, modifies the data to calculate the longest lines and stores this data in the
+The data returned by the endpoints provided by this service is retrieved from an in memory database.
+This means that as the service starts there are no dependencies on any database connections, but it
+also means that no data is persisted during restarts. To load the data the service therefore calls
+the SL Api on start up, modifies the data to calculate the longest lines and stores this data in the
 database. This data is then periodically refreshed by scheduling the loader to run once per hour.
 The refresh rate of one hour is arbitrary and can be made longer as the SL api typically only
 updates once per day.
