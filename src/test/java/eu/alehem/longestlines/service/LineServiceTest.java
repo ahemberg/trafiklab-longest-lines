@@ -102,36 +102,3 @@ public class LineServiceTest {
     verify(lineRepository, times(1)).findAll();
   }
 }
-
-
-
-/*
-ublic void insertLines(List<BusLine> lines) {
-    // TODO: Make sure that this actually updates
-    lineRepository.saveAll(lines);
-  }
-
-  public List<LineDTO> getLongestLines(int limit) {
-    return lineRepository.getLongestBusLines(10).stream()
-        .map(bl -> new LineDTO(bl.getLineNumber()))
-        .collect(Collectors.toList());
-  }
-
-  public List<LineDTO> getLongestOutboundLines(int limit) {
-    return lineRepository.getLongestOutboundBusLines(10).stream()
-        .map(bl -> new LineDTO(bl.getLineNumber()))
-        .collect(Collectors.toList());
-  }
-
-  public List<LineDTO> getLongestInboundLines(int limit) {
-    return lineRepository.getLongestInboundBusLines(10).stream()
-        .map(bl -> new LineDTO(bl.getLineNumber()))
-        .collect(Collectors.toList());
-  }
-
-  public List<LineDTO> getAllLines() {
-    return lineRepository.findAll().stream()
-        .map(bl -> new LineDTO(bl.getLineNumber()))
-        .collect(Collectors.toList());
-  }
- */
