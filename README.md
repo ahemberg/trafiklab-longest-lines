@@ -31,7 +31,7 @@ The service provides two apis. A json api and a cleartext api.
 
 ### Json API
 
-The json api is available from the root and has following endpoints defined in the table below. The
+The json api is available from the root and has the following endpoints defined in the table below. The
 response is always a json object.
 
 | Endpoint               | Parameters  | Description                                                                                                                                                                                                              |
@@ -142,7 +142,7 @@ The format is as follows:
 
 ### Cleartext API
 
-The cleartext api is available under `/clear-text` and has following endpoints defined in the table
+The cleartext api is available under `/clear-text` and has the following endpoints defined in the table
 below. The response is a comma separated string.
 
 | Endpoint                         | Parameters  | Description                                                                                                                                                                                                              |
@@ -164,12 +164,12 @@ updates once per day.
 
 The class responsible for loading the data is
 called [TrafikLabLoaderService.java](https://github.com/ahemberg/trafiklab-longest-lines/blob/master/src/main/java/eu/alehem/longestlines/service/TrafikLabLoaderService.java)
-and it is responsible for calling the service that makes the API call to trafiklab, and then calling
+and it is responsible for calling the service that makes the API call to Trafiklab, and then calling
 the services that store the data in the database. The business logic of calculating the longest
 lines happens here.
 
 The reason for loading the data into a database periodically as opposed to loading the data
-continously on every api call is to reduce the number of calls to the external API, as they are
+continuously on every api call is to reduce the number of calls to the external API, as they are
 quite slow and compute heavy. It would be possible to make the calls to the external API on every
 request if a cache layer was used, but since the calls are so slow this would slow down any call
 that happens to be made right after the cache was invalidated. For a real production service it
@@ -179,14 +179,14 @@ upstream data changes, but this is probably out of scope for this task.
 ### Algorithm for calculating the longest lines
 
 When storing bus lines in the database two datasets are joined, JourneyPatternPointOnLine and Line.
-All Journeypatterns are transformed into two maps, where the key represents the bus line and the
+All JourneyPatterns are transformed into two maps, where the key represents the bus line and the
 value stored is a list representing either all outgoing or ingoing lines. This data is then joined
 by all bus lines from the dataset Line into a table with the following columns:
 
 | LINE_NUMBER | TOTAL_INBOUND | TOTAL_OUTBOUND | 	TOTAL_STOPS | 	INBOUND_STOPS | OUTBOUND_STOPS |
 |-------------|---------------|----------------|--------------|----------------|----------------|
 
-When the the longest lines are requested it is then a simple matter of querying the database for
+When the longest lines are requested it is then a simple matter of querying the database for
 this information, for example like:
 
 ```sql
