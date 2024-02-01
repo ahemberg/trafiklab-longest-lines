@@ -219,7 +219,7 @@ This query is made twice, once for outgoing and once for ingoing stops.
 ### Loading data from the SL API
 
 The data is loaded from the SL API by the
-class [TrafikLabService.java](https://github.com/ahemberg/trafiklab-longest-lines/blob/master/src/main/java/eu/alehem/longestlines/service/TrafikLabService.java).
+class [TrafikLabService.java](https://github.com/ahemberg/trafiklab-longest-lines/blob/master/src/main/java/eu/alehem/longestlines/service/TrafiklabService.java).
 This class handles all the API calls to the external API. It uses Webflux to load the data, which
 enables the data to be loaded asynchronously. The class exposes three public methods, one for each
 dataset to be loaded. These methods are called by the TrafikLabLoaderService service.
